@@ -8,6 +8,7 @@ const TWITTER_HANDLE = "Web3dev_";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_LINK = "";
 const TOTAL_MINT_COUNT = 50;
+const CONTRACT_ADDRESS = "0x5Af03794F506e4A6Cf24F2086e5393236760085A";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -53,19 +54,14 @@ const App = () => {
       console.log(error);
     }
   };
-
   const askContractToMintNft = async () => {
-    const CONTRACT_ADDRESS = "0x4fa4083E9908A75671FaF2EF4Db6B4D4BCDc8400";
+    
     try {
       const { ethereum } = window;
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        const connectedContract = new ethers.Contract(
-          CONTRACT_ADDRESS,
-          myEpicNft.abi,
-          signer
-        );
+        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS,myEpicNft.abi,signer);
         console.log("Vai abrir a carteira agora para pagar o gás...");
         let nftTxn = await connectedContract.makeAnEpicNFT();
         console.log("Mintando...espere por favor.");
