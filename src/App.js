@@ -76,26 +76,6 @@ const App = () => {
     }
   }
 
-  const askContractToMintNft = async () => {
-    try {
-      const { ethereum } = window
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum)
-        const signer = provider.getSigner()
-        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, myEpicNft.abi, signer)
-
-        console.log("Vai abrir a carteira agora para pagar o gás...")
-        let nftTxn = await connectedContract.makeAnEpicNFT()
-        console.log("Cunhando...espere por favor.")
-        await nftTxn.wait()
-        console.log(`Cunhado, veja a transação: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`)
-      } else {
-        console.log("Objeto ethereum não existe!")
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
   // Setup do listener.
   const setupEventListener = async () => {
     // é bem parecido com a função
@@ -105,6 +85,7 @@ const App = () => {
       if (ethereum) {
         // mesma coisa de novo
         const provider = new ethers.providers.Web3Provider(ethereum)
+        console.log(ethereum)
         const signer = provider.getSigner()
         const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, myEpicNft.abi, signer)
 
@@ -127,6 +108,27 @@ const App = () => {
     }
   }
 
+  async function askContractToMintNft() {
+    console.log("skldjuhf")
+    try {
+      const { ethereum } = window
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const signer = provider.getSigner()
+        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, myEpicNft.abi, signer)
+        
+        console.log("Vai abrir a carteira agora para pagar o gás...")
+        let nftTxn = await connectedContract.makeAnEpicNFT()
+        console.log("Cunhando...espere por favor.")
+        await nftTxn.wait()
+        console.log(`Cunhado, veja a transação: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`)
+      } else {
+        console.log("Objeto ethereum não existe!")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // Métodos para Renderizar
   const renderNotConnectedContainer = () => (
