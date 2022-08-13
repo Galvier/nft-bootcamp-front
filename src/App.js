@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import myEpicNft from "./utils/MyEpicNFT.json";
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
+
 const TWITTER_HANDLE = "Web3dev_";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_LINK = "";
@@ -51,6 +53,33 @@ const App = () => {
     }
   };
 
+  const askContractToMintNft = async () => {
+    const CONTRACT_ADDRESS = "0x4fa4083E9908A75671FaF2EF4Db6B4D4BCDc8400";
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          myEpicNft.abi,
+          signer
+        );
+        console.log("Vai abrir a carteira agora para pagar o gás...");
+        let nftTxn = await connectedContract.makeAnEpicNFT();
+        console.log("Mintando...espere por favor.");
+        await nftTxn.wait();
+        console.log(
+          `Mintado, veja a transação: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
+        );
+      } else {
+        console.log("Objeto ethereum não existe!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Métodos para Renderizar
   const renderNotConnectedContainer = () => (
     <button onClick={connectWallet} className="cta-button connect-wallet-button">
@@ -76,7 +105,7 @@ const App = () => {
             renderNotConnectedContainer()
           ) : (
             <button onClick={null} className="cta-button connect-wallet-button">
-              Cunhar NFT
+              Mintar NFT
             </button>
           )}
         </div>
@@ -87,7 +116,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`feito com ❤️ pela @${TWITTER_HANDLE}`}</a>
+          >{`feito com ❤️ por Jonathan através da @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
